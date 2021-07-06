@@ -4,6 +4,8 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const authJwt = require('./helpers/jwt');
+const errorHandler = require('./helpers/error-handler');
 require('dotenv/config') // to get value from .env file
 
 app.use(cors());
@@ -12,7 +14,8 @@ app.options('*', cors());
 //Middleware methods
 app.use(bodyParser.json());
 app.use(morgan('tiny')); //useful to dispaly log request in specific format
-
+app.use(authJwt()); // to validate all the incoming and outgoing request with token
+app.use(errorHandler)//Handle error at middleware
 //Routers
 const productsRoutes = require('./routers/products');
 const usersRoutes = require('./routers/users');
